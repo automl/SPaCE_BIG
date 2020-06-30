@@ -19,11 +19,12 @@ The included notebooks for plotting and generating new instance also require jup
 pip install jupyter
 ```
 
-To train a SPaCE agent on our provided instances, run:
+To train a SPaCE agent on our provided instances, you can run the following on a GPU (does not currently work on CPU):
 ```bash
 python src/ray_spl.py --mode spl --instances features/cpm_train.csv --test features/cpm_test.csv
 ```
 Replacing "spl" with "rr" will result in a round robin trained agent for comparison.
 
+Alternatively, you can use our provided slurm script.
 ## Results included in the workshop paper
 Our own training results are included in this repository. To plot the data, you can use the provided jupyter notebook.

@@ -1,16 +1,9 @@
 import ray
 from ray.tune.registry import register_env
 from ray.rllib.agents.ppo import PPOTrainer
-from ray.rllib.models import MODEL_DEFAULTS
-from ray.rllib.models.catalog import ModelCatalog
-from ray.rllib.models.torch.torch_modelv2 import TorchModelV2
 from ray.rllib.utils import try_import_torch
-from ray.rllib.utils.annotations import override
-from ray.rllib.models.preprocessors import Preprocessor
 
-from point_mass_wrapper import PointMassWrapper, CPMWrapper
-from ray_env_wrapper import FunchainWrapper
-from procgen_wrapper import ProcgenWrapper
+from point_mass_wrapper import CPMWrapper
 import csv
 import numpy as np
 import logging
@@ -18,7 +11,8 @@ import os
 import argparse
 from functools import partial
 
-torch, nn = try_import_torch()
+torch, _ = try_import_torch()
+
 
 def env_creator(env_config):
     path = env_config["path"]
@@ -152,7 +146,7 @@ if __name__ == "__main__":
     if not os.path.exists(outdir):
         os.mkdir(outdir)
 
-    env_creator_name = args.env + "_" + args.mode
+    env_creator_name = "cpm_" + args.mode
     register_env(env_creator_name, env_creator)
     logger = logging.getLogger(__name__)
 
@@ -191,7 +185,7 @@ if __name__ == "__main__":
     training_steps = n_instances
     eval_factor = 1
 
-    for i in range(args.iter):
+    for i in range(int(args.iter)):
         for j in range(training_steps):
             trainer.train()
         steps += training_steps
